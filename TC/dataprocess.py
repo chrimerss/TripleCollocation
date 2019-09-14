@@ -7,7 +7,18 @@ import pandas as pd
 # import xarray as xr
 
 class PixelTS(object):
+    '''
+    pixel wise time series data producer
 
+    Methods:
+    ------------------
+    :generator() - generator; return pixel time series data
+    :singlePixel - return pixel time series data
+
+    Attributes:
+    ------------------
+    :self.pixelts - pandas.DataFrame; pixel time series
+    '''
     def __init__(self):
         self.products= ['radar', 'satellite', 'gauge']
         _data= self.getProductData(self.products[0])
@@ -37,16 +48,34 @@ class PixelTS(object):
 
 
 class ProductData(object):
+    '''
+    Load product data into time series dictionary
 
-    def __init__(self, product):
+    Arguments:
+    ------------------
+    :product - str; one of [radar, satellite, gauge]
+    :folder - list; ordered list [radar, satellite, gauge]
+
+    Attributes:
+    ------------------
+    :self.ts - dict; {datetime: array}; return time series data
+    '''
+
+    def __init__(self, product, folder=None):
 
         self.product= product
-        if self.product== 'radar':
-            folder= '../cleaned/mrmsrt1H4kmw'
-        elif self.product== 'satellite':
-            folder= '../cleaned/GPMrt1H4kmw'
-        elif self.product== 'gauge':
-            folder= '../cleaned/gauge4km'
+        self.folder= folder
+        if self.folder is None:
+            if self.product== 'radar':
+                folder= '../cleaned/mrmsrt1H4kmw'
+            elif self.product== 'satellite':
+                folder= '../cleaned/GPMrt1H4kmw'
+            elif self.product== 'gauge':
+                folder= '../cleaned/gauge4km'
+        else:
+            radar= self.folder[0]
+            satellite= self.folder[1]
+            gauge= self.floder[2]
         # load time series
         self._ts_data= self.loadTS(folder, product)
 
