@@ -2,3 +2,4 @@ MTC/*
 rainfall_analysis/*
 cleaned/*
 *.tif
+*.ipynb

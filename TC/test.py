@@ -80,6 +80,13 @@ def test_parallel_write():
     end= time.time()
     print('time spent for retrieving one pixel: %.2f seconds'%(end-start))
 
+def test_ts_tc():
+    start= time.time()
+    tc= TripleCollocation()
+    tc.ts_tc(cores=4)
+    end= time.time()
+    print('time spent for retrieving one pixel: %.2f seconds'%(end-start))
+
 if __name__=='__main__':
     #test_radar_name() #pass radar name
     #test_sat_name().  #pass satellite name
@@ -88,5 +95,6 @@ if __name__=='__main__':
     # test_pixelts().   # passed with 0.37s
     # test_preprocess() #passed
     # test_parallel()     #passed 17.97 for 100 pixels
-    test_parallel_write() #passed 2.85 hours for whole map
+    # test_parallel_write() #passed 2.85 hours for whole map
+    test_ts_tc()
 

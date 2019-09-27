@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SAGA_METADATA>
+  <HISTORY saga-version="2.3.2">
+    <MODULE library="shapes_grid" id="7" name="Clip Grid with Polygon">
+      <OPTION type="grid_system" id="PARAMETERS_GRID_SYSTEM" name="Grid system">
+        <CELLSIZE>0.0441979522</CELLSIZE>
+        <XMIN>-100.9779010239</XMIN>
+        <XMAX>-88.07209898150001</XMAX>
+        <YMIN>25.8221153846</YMIN>
+        <YMAX>34.97109149</YMAX>
+      </OPTION>
+      <OPTION type="boolean" id="NODATA" name="Exclude No-Data Area">FALSE</OPTION>
+      <INPUT_LIST type="grid_list" id="INPUT" name="Input" system="PARAMETERS_GRID_SYSTEM">
+        <radarsatellitefar type="grid_list" id="INPUT" name="Input" system="PARAMETERS_GRID_SYSTEM">
+          <FILE>/private/var/folders/c9/0qk1cz1j4p38fc62gby8xbrc0000gn/T/processing_877a46ee76d34d5b87502c270af7dfea/53dc88db57f04b4c8bbfcc2f93fe137d/radarsatellitefar.sgrd</FILE>
+        </radarsatellitefar>
+      </INPUT_LIST>
+      <INPUT type="shapes" id="POLYGONS" name="Polygons">
+        <FILE>/Users/allen/Documents/TC/harveyimpact/harveyimpact.shp</FILE>
+      </INPUT>
+      <OUTPUT type="grid_list" id="OUTPUT" name="Output">radarsatellitefar</OUTPUT>
+    </MODULE>
+  </HISTORY>
+  <SOURCE>
+    <FILE>/Users/allen/Documents/TC/TC/intercomparison/radar_satellite_far.sgrd</FILE>
+    <DATABASE></DATABASE>
+    <PROJECTION></PROJECTION>
+  </SOURCE>
+  <DESCRIPTION></DESCRIPTION>
+</SAGA_METADATA>

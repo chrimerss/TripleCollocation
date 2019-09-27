@@ -24,6 +24,7 @@ class PixelTS(object):
         _data= self.getProductData(self.products[0])
         self.size= list(_data.values())[0].shape
         self._df= pd.DataFrame(index=_data.keys(), columns=['radar', 'satellite', 'gauge'])
+        # self._df.index= pd.to_datetime(self._df.index, format='%Y%m%d%H')
 
     def generator(self):
 

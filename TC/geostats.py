@@ -19,7 +19,9 @@ def parallel(x='gauge', y='radar'):
             'r':np.zeros((i,j), dtype=np.float16),
             'pod':np.zeros((i,j), dtype=np.float16),
             'far':np.zeros((i,j), dtype=np.float16),
-            'csi':np.zeros((i,j), dtype=np.float16)
+            'csi':np.zeros((i,j), dtype=np.float16),
+            'sum_%s'%x:np.zeros((i,j), dtype= np.float16),
+            'sum_%s'%y:np.zeros((i,j), dtype= np.float16)
             }
 
     start= time.time()
@@ -35,6 +37,8 @@ def parallel(x='gauge', y='radar'):
         stats['pod'][ii,jj]= stat['pod']
         stats['far'][ii,jj]= stat['far']
         stats['csi'][ii,jj]= stat['csi']
+        stats['sum_%s'%x][ii,jj]= stat['sum_%s'%x]
+        stats['sum_%s'%y][ii,jj]= stat['sum_%s'%(y)]
     end= time.time()
     print('total elapsed time : %.2f hours!'%((end-start)/3600.))
 
@@ -49,10 +53,12 @@ def single(arg):
     r= R(ts[x].values.astype(float), ts[y].values.astype(float))
     norm_rmse= normRMSE(ts[x].values.astype(float), ts[y].values.astype(float))
     norm_mae= normMAE(ts[x].values.astype(float), ts[y].values.astype(float))
-    bias= biasRatio(ts[x].values.astype(float), ts[y].values.astype(float))
+    bias= totalVolumeRatio(ts[x].values.astype(float), ts[y].values.astype(float))
     pod= POD(ts[x].values.astype(float), ts[y].values.astype(float))
     far=FAR(ts[x].values.astype(float), ts[y].values.astype(float))
     csi= CSI(ts[x].values.astype(float), ts[y].values.astype(float))
+    _sum_x= Sum(ts[x].values.astype(float))
+    _sum_y= Sum(ts[y].values.astype(float))
     stat= {'rmse': rmse,
             'mae': mae,
             'r': r,
@@ -61,7 +67,9 @@ def single(arg):
             'bias': bias,
             'pod': pod,
             'far': far,
-            'csi': csi}
+            'csi': csi,
+            'sum_%s'%x: _sum_x,
+            'sum_%s'%y: _sum_y}
 
     return stat, ii, jj
 
@@ -75,7 +83,9 @@ def stats(x='gauge', y='radar'):
             'r':np.zeros((i,j), dtype=np.float16),
             'pod':np.zeros((i,j), dtype=np.float16),
             'far':np.zeros((i,j), dtype=np.float16),
-            'csi':np.zeros((i,j), dtype=np.float16)
+            'csi':np.zeros((i,j), dtype=np.float16),
+            'sum_%s'%x: np.zeros((i,j), dtype=np.float16),
+            'sum_%s'%y: np.zeros((i,j), dtype=np.float16)
             }
 
     for ii in tqdm(range(i)):
@@ -96,9 +106,9 @@ def stats(x='gauge', y='radar'):
 
 def nonnan(x,y):
     # print(type(x))
-    mask= np.isnan(x) & np.isnan(y)
-    x= x[~mask]
-    y= y[~mask]
+    mask= (x>=0) & (y>=0)
+    x= x[mask]
+    y= y[mask]
 
     return x, y
 
@@ -123,10 +133,12 @@ def R(x,y):
 
 def normRMSE(x, y):
     x,y= nonnan(x, y)
-    if x.mean()==0:
+    if len(x)==0:
+        return np.nan
+    elif x.max()-x.mean()==0:
         return np.nan
     else:
-        return RMSE(x,y)/x.mean()
+        return RMSE(x,y)/(x.max()-x.mean())
 
 def MAE(x, y):
     x,y= nonnan(x, y)
@@ -139,23 +151,25 @@ def MAE(x, y):
 
 def normMAE(x, y):
     x,y= nonnan(x, y)
-    if x.mean()==0:
+    if len(x)==0:
+        return np.nan
+    elif x.max()-x.mean()==0:
         return np.nan
     else:
-        return MAE(x, y)/x.mean()
+        return MAE(x, y)/(x.max()-x.mean())
 
-def biasRatio(x, y):
+def totalVolumeRatio(x, y):
     x,y= nonnan(x, y)
-    if y.sum()==0:
+    if len(x)==0 or y.sum()==0:
         return np.nan
     else:
-        return (x-y).sum()/y.sum()
+        return x.sum()/y.sum()
 
 def POD(x, y, threshold=0.2):
     x,y= nonnan(x, y)
     a= (x>threshold) & (y>threshold)
     b= (x<threshold) & (y>threshold)
-    if (a.sum()+b.sum())==0:
+    if len(a)==0 or (a.sum()+b.sum())==0:
         return np.nan
     else:
         return a.sum()/(a.sum()+b.sum())
@@ -164,7 +178,7 @@ def FAR(x,y,threshold=0.2):
     x,y= nonnan(x, y)
     c= (x>threshold) & (y<threshold)
     a= (x>threshold) & (y>threshold)
-    if (a.sum()+c.sum())==0:
+    if len(a)==0 or (a.sum()+c.sum())==0:
         return np.nan
     else:
         return c.sum()/(a.sum()+c.sum())
@@ -174,10 +188,18 @@ def CSI(x,y,threshold=0.2):
     a= (x>threshold) & (y>threshold)
     b= (x<threshold) & (y>threshold)
     c= (x>threshold) & (y<threshold)
-    if (a.sum()+b.sum()+c.sum())==0:
+    if len(a)==0 or (a.sum()+b.sum()+c.sum())==0:
         return np.nan
     else:
         return a.sum()/(a.sum()+b.sum()+c.sum())
+
+def Sum(x):
+    y= np.zeros(len(x))
+    x,y= nonnan(x, y)
+    if len(x)==0:
+        return np.nan
+    else:
+        return x.sum()
 
 def write_geotiff(dst, new_dict):
         pth= '../cleaned/gauge4km/ST2gg2017082500.Grb.tif'
@@ -197,4 +219,4 @@ def write_geotiff(dst, new_dict):
             outdata = None
 
 if __name__=='__main__':
-    parallel()     #2.48 hours to run
+    parallel('radar', 'satellite')     #2.48 hours to run

@@ -3,6 +3,7 @@ Triple Collocation Method
 '''
 
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 import os
 from osgeo import gdal
@@ -22,6 +23,35 @@ class TripleCollocation(object):
 
     def __init__(self):
         pass
+
+    def ts_tc(self,cores=4):
+        i=208; j=293
+        RMSE= np.zeros((7, 208,293,3), dtype=np.float16)
+        CC= np.zeros((7, 208, 293,3), dtype=np.float16)
+        inputs= [(i,j) for i in range(10) for j in range(10)]
+        pool= multiprocessing.Pool(cores)
+        results= pool.map(self._ts_tc_single, inputs)
+        for result in results:
+            i,j,r,c= result
+            RMSE[:,i,j,:]= r
+            CC[:,i,j,:]= c
+        RMSE_radar= RMSE[:, :,:,0]
+        RMSE_sat= RMSE[:,:,:,1]
+        RMSE_gauge= RMSE[:,:,:,2]
+
+        CC_radar= CC[:,:,:,0]
+        CC_sat= CC[:,:,:,1]
+        CC_gauge= CC[:,:,:,2]
+
+        for day in range(7):
+            self.write_geotif('TCresults/rmse_radar_mtc_day_%d.tif'%day, RMSE_radar[day,:,:])
+            self.write_geotif('TCresults/rmse_sat_mtc_day_%d.tif'%day,  RMSE_sat[day,:,:])
+            self.write_geotif('TCresults/rmse_gauge_mtc_day_%d.tif'%day, RMSE_gauge[day,:,:])
+
+            self.write_geotif('TCresults/cc_radar_mtc_day_%d.tif'%day, CC_radar[day,:,:])
+            self.write_geotif('TCresults/cc_sat_mtc_day_%d.tif'%day,  CC_sat[day,:,:])
+            self.write_geotif('TCresults/cc_gauge_mtc_day_%d.tif'%day, CC_gauge[day,:,:])
+
 
     def main(self):
         i= 208; j= 293
@@ -68,13 +98,13 @@ class TripleCollocation(object):
         CC_gauge= CC[:,:,2]
 
         if write:
-            self.write_geotif('rmse_radar.tif',RMSE_radar)
-            self.write_geotif('rmse_sat.tif',  RMSE_sat)
-            self.write_geotif('rmse_gauge.tif',RMSE_gauge)
+            self.write_geotif('TCresults/rmse_radar_atc_n_100.tif',RMSE_radar)
+            self.write_geotif('TCresults/rmse_sat_atc_n_100.tif',  RMSE_sat)
+            self.write_geotif('TCresults/rmse_gauge_atc_n_100.tif',RMSE_gauge)
 
-            self.write_geotif('cc_radar.tif',CC_radar)
-            self.write_geotif('cc_sat.tif',  CC_sat)
-            self.write_geotif('cc_gauge.tif',CC_gauge)
+            self.write_geotif('TCresults/cc_radar_atc_n_100.tif',CC_radar)
+            self.write_geotif('TCresults/cc_sat_atc_n_100.tif',  CC_sat)
+            self.write_geotif('TCresults/cc_gauge_atc_n_100.tif',CC_gauge)
 
             # self.write_geotif('test.tif', np.zeros((208,293)))
 
@@ -98,6 +128,28 @@ class TripleCollocation(object):
 
         return RMSE, CC, i,j
 
+    def _ts_tc_single(self, args):
+        i,j= args
+        print('processing (%d-%d)'%(i,j))
+        RMSE= np.zeros((7, 3), dtype=np.float16)
+        CC=np.zeros((7, 3), dtype=np.float16)
+        ts= PixelTS().singlePixel(i,j)
+        # print(ts.radar)
+        ts.index= pd.to_datetime(ts.index, format='%Y%m%d%H')
+        # print(type(ts.index))
+        days= set(ts.index.day.values)
+        for i, day in enumerate(days):
+            partial_ts= ts[ts.index.day==day]
+            partial_ts= self.preprocess(partial_ts)
+            if len(partial_ts)==0 or len(partial_ts)<3:
+                RMSE[i,:]= np.array([-9999]*3)
+                CC[i, :]= np.array([-9999]*3)
+            else:
+                _sig, _r= self.mtc(partial_ts)
+                RMSE[i,:]= _sig
+                CC[i, :]= _r
+
+        return i,j, RMSE, CC
 
 
     def preprocess(self, data, threshold1=0, threshold2=0.01):
@@ -109,7 +161,7 @@ class TripleCollocation(object):
             data.clip(lower=threshold2, inplace=True)
             # data.dropna(inplace=True)
         # print(data)
-        data= data.apply(np.log)
+        # data= data.apply(np.log)
 
         return data
 
