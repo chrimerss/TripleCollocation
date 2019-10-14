@@ -3,3 +3,4 @@ rainfall_analysis/*
 cleaned/*
 *.tif
 *.ipynb
+*.pdf

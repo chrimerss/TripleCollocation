@@ -48,6 +48,8 @@ def single(arg):
     ii,jj,x,y= arg
     print('processing %d-%d'%(ii,jj))
     ts= PixelTS().singlePixel(ii,jj)
+    ts.radar= ts.radar.shift()
+    ts.satellite= ts.satellite.shift()
     rmse= RMSE(ts[x].values.astype(float), ts[y].values.astype(float))
     mae= MAE(ts[x].values.astype(float), ts[y].values.astype(float))
     r= R(ts[x].values.astype(float), ts[y].values.astype(float))

@@ -3,7 +3,7 @@
 This is the python implementation of Triple Collocation method.
 
 ## Introduction
-The idea of using TC method in precipitation estimation is because under severe climate e.g. hurricane, turnado, None of the morden techniques of estimating rainfall (satellite, radar, gauge) is recognized as ground truth. Thus, without leveraging any one of these, we actually propose a error model that take advantage of these three methods.
+The idea of using TC method in precipitation estimation is because under severe climate e.g. hurricane, turnado, None of the modern techniques of estimating rainfall (satellite, radar, gauge) can be recognized as ground truth. Thus, without leveraging any one of these, we actually propose a error model that take advantage of these three methods.
 
 The big assumption of utilizing TC method is: 1) three data source must be independent. 2) The expectation of error due to three techniques is 0. 3)The errors for different products are independent.
 
@@ -12,6 +12,23 @@ The MTC method can be formularized as follow,
 $$R_i=A_iT^{\beta_i}E_i$$
 
 The following steps are rearanging these terms by calculating its corvariance, and coorelation coefficient.
+
+## Objectives
+
+1. Evaluate the applicability of TC method in extreme 
+
+2. Inspect uncertainties of each product in measuring rainfall during extremes.
+
+## Study domain
+
+<img src="src/studydomain.png" width="70%">
+
+This is the map containing 9 states in the United States, which also subject to severe weather events the most. Besides, four events are selected to fall into this analysis. Hurricane Harvey (2017.08.25-2017.08.31), Tropical Cyclone Bill (2015.) Tropical Cyclone Cindy (2017. ) and Storm Imeda (2019)
+
+## Datasets
+
+three independent data are chosen: NCEP gridded hourly gauge only product, mrms radar only data, IMERG final PrecipitationUncal.
+
 
 ### NCEP vs. gauge raw data
 

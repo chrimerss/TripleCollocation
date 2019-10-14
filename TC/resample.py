@@ -37,9 +37,9 @@ def main(num_process=3):
     --------------
     None, but write .tif files
     '''
-    gauge_folder= 'gauge4km'
-    sat_folder= 'GPMrt1H4kmw'
-    radar_folder= 'mrmsrt1H4kmw'
+    gauge_folder= 'raingauge'
+    sat_folder= 'GPM_data_agg'
+    radar_folder= 'mrmsPrate'
     folders= [gauge_folder, sat_folder, radar_folder]
     pool= Pool(3)
     pool.map(process, folders)

@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resource xmlns="http://datacite.org/schema/kernel-3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://datacite.org/schema/kernel-3 http://schema.datacite.org/meta/kernel-3.1/metadata.xsd">
+  <identifier identifierType="DOI">
+    10.5072/UCAR/NCAR/EOL/DATASET/21.088
+  </identifier>
+  <creators>
+    <creator>
+      <creatorName>
+        Lin, Y.
+      </creatorName>
+      <affiliation>
+        NCEP/EMC
+      </affiliation>
+    </creator>
+  </creators>
+  <titles>
+    <title>
+      NCEP/EMC U.S. Gridded Gage Only Hourly Precipitation. Version 1.0
+    </title>
+  </titles>
+  <publisher>
+    UCAR/NCAR - Earth Observing Laboratory
+  </publisher>
+  <publicationYear>
+    2011
+  </publicationYear>
+  <resourceType resourceTypeGeneral="Dataset">
+    scientific data
+  </resourceType>
+  <subjects>
+    <subject>
+      Surface
+    </subject>
+    <subject>
+      NCEP Precipitation
+    </subject>
+    <subject>
+      Rain Gauges
+    </subject>
+    <subject subjectScheme="GCMD" schemeURI="https://gcmd.nasa.gov/">
+      In Situ/Laboratory Instruments &gt; Gauges &gt; &gt; &gt; RAIN GAUGES &gt; &gt; 6a0afbcb-36d7-4b10-a2c1-35d4d14d6c75
+    </subject>
+    <subject subjectScheme="GCMD" schemeURI="https://gcmd.nasa.gov/">
+      EARTH SCIENCE &gt; ATMOSPHERE &gt; PRECIPITATION &gt; PRECIPITATION AMOUNT &gt; HOURLY PRECIPITATION AMOUNT &gt; 2f0f103a-4fe9-429f-a783-ba1d6e6a446a
+    </subject>
+    <subject>
+      BAMEX
+    </subject>
+    <subject>
+      Bow Echo and Mesoscale Convective Vortex Experiment 2003
+    </subject>
+    <subject>
+      CuPIDO
+    </subject>
+    <subject>
+      Cumulus Photogrammetric, In-Situ and Doppler Observations
+    </subject>
+    <subject>
+      NAME
+    </subject>
+    <subject>
+      North American Monsoon Experiment
+    </subject>
+    <subject>
+      GCIP/EOP
+    </subject>
+    <subject>
+      GCIP Enhanced Observing Period
+    </subject>
+    <subject subjectScheme="GCMD" schemeURI="https://gcmd.nasa.gov/">
+      GCIP &gt; GEWEX Continental-Scale International Project
+    </subject>
+    <subject>
+      Operational
+    </subject>
+    <subject>
+      Operational Datasets
+    </subject>
+    <subject>
+      T-REX
+    </subject>
+    <subject>
+      Terrain-induced Rotor Experiment
+    </subject>
+    <subject>
+      IHOP_2002
+    </subject>
+    <subject>
+      International H2O Project 2002
+    </subject>
+  </subjects>
+  <contributors>
+    <contributor contributorType="HostingInstitution">
+      <contributorName>
+        University Corporation For Atmospheric Research (UCAR):National Center for Atmospheric Research (NCAR):Earth Observing Laboratory (EOL):Data Managment and Services (DMS)
+      </contributorName>
+    </contributor>
+    <contributor contributorType="ContactPerson">
+      <contributorName>
+        Lin, Ying, ying.lin@noaa.gov
+      </contributorName>
+      <affiliation>
+        NCEP/EMC
+      </affiliation>
+    </contributor>
+  </contributors>
+  <dates>
+    <date dateType="Collected">
+      2002-01-01T00:00:00Z/2019-08-31T23:00:00Z
+    </date>
+    <date dateType="Available">
+      2011-08-11T16:05:51Z
+    </date>
+  </dates>
+  <language>
+    en
+  </language>
+  <alternateIdentifiers>
+    <alternateIdentifier alternateIdentifierType="local">
+      21.088
+    </alternateIdentifier>
+  </alternateIdentifiers>
+  <relatedIdentifiers>
+    <relatedIdentifier relatedIdentifierType="URL" relationType="IsSupplementedBy">
+      https://data.eol.ucar.edu/dataset/21.081
+    </relatedIdentifier>
+    <relatedIdentifier relatedIdentifierType="URL" relationType="IsSupplementedBy">
+      https://data.eol.ucar.edu/dataset/21.009
+    </relatedIdentifier>
+    <relatedIdentifier relatedIdentifierType="URL" relationType="IsNewVersionOf">
+      https://data.eol.ucar.edu/dataset/21.088
+    </relatedIdentifier>
+    <relatedIdentifier relatedIdentifierType="URL" relationType="IsDocumentedBy">
+      https://data.eol.ucar.edu/datafile/nph-get/21.088/katz_stage4_readme.txt
+    </relatedIdentifier>
+    <relatedIdentifier relatedIdentifierType="URL" relationType="IsDocumentedBy">
+      https://data.eol.ucar.edu/datafile/nph-get/21.088/katz_missing_data.txt
+    </relatedIdentifier>
+    <relatedIdentifier relatedIdentifierType="URL" relationType="IsDocumentedBy">
+      http://www.emc.ncep.noaa.gov/mmb/ylin/pcpanl/
+    </relatedIdentifier>
+  </relatedIdentifiers>
+  <sizes>
+    <size>
+      186764 data files
+    </size>
+    <size>
+      2 ancillary/documentation files
+    </size>
+    <size>
+      7 GiB
+    </size>
+  </sizes>
+  <formats>
+    <format>
+      GNU Zip Compressed (.gz) Gridded Binary (GRIB) Format (application/x-gzip)
+    </format>
+  </formats>
+  <version>
+    1.0
+  </version>
+  <rightsList>
+    <rights rightsURI="https://www.ucar.edu/terms-of-use">
+      These data are available to be used subject to the University Corporation for Atmospheric Research ("UCAR") terms and conditions.
+    </rights>
+  </rightsList>
+  <descriptions>
+    <description descriptionType="Abstract">
+      
+This dataset contains the National Centers for Environmental Prediction (NCEP) Environmental Modeling Center (EMC) 4 KM GRIB gage-only analysis ("GAG") data. A prototype, real-time, hourly, multi-sensor National Preciptation Analysis (NPA) has been developed at NCEP in cooperation with the Office of Hydrology (OH). This analysis merges two data sources that are currently being collected in real-time by OH and NCEP. Hourly digital precipitation (HDP) radar estimates are created by the WSR-88D Radar Product Generator on a 131 X 131 4-km grid centered over each radar site. Data analysis routines, including a bias correction of the radar estimates using rain gage data, have been adapted by NCEP on a national 4-km grid from algorithms developed by OH and executed regionally at NWS River Forecast Centers (RFC). This dataset only contains the NCEP 4 KM GRIB Data gage-only hourly, 6-hourly, and daily analysis. 6-hourly data are generally available at 00Z, 06Z, 12Z, and 18Z. Daily data are generally available at 12Z. Depending on the time period selected, all three datasets may or may not be available. Other NCEP 4 KM GRIB Data including multi-sensor analysis (gage and unbiased radar), radar estimate, radar estimate after bias removal, and gage-only analysis using 24h accumulated ("RFC") data are available as independent datasets. Depending on the time period selected, all five types may or may not be available. Please see GCIP/EOP: Surface NCEP Ancillary Catalogue of Available GCIP Precipitation Data (NCEP/EMC). The format of the files is GRIB. The files are compressed using the UNIX "compress" command and "uncompress" must be used before decoding. This dataset is provided as is and was not quality controlled by UCAR/JOSS. Beginning 1 Jan 2002, the analysis grid has been changed to conform with the official NWS HRAP grid. File names have also been changed. See the readme provided with this dataset for details. As of April 2017 this data includes Alaska and Puerto Rico stations.    </description>
+  </descriptions>
+  <geoLocations>
+    <geoLocation>
+      <geoLocationBox>
+        17.85300 -176.83600 71.41300 -65.54400
+      </geoLocationBox>
+    </geoLocation>
+  </geoLocations>
+</resource>

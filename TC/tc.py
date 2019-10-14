@@ -80,9 +80,10 @@ class TripleCollocation(object):
 
         return (RMSE_radar, RMSE_sat, RMSE_gauge), (CC_radar, CC_sat, CC_gauge)
 
-    def parallel(self, cores=4, write=False):
+    def parallel(self, cores=6, write=False):
         RMSE= np.zeros((208,293,3), dtype=np.float16)
         CC= np.zeros((208, 293,3), dtype=np.float16)
+        # inputs= [(i,j) for i in range(100,130) for j in range(100,140)]
         inputs= [(i,j) for i in range(208) for j in range(293)]
         pool= multiprocessing.Pool(cores)
         results= pool.map(self.single, inputs)
@@ -98,13 +99,13 @@ class TripleCollocation(object):
         CC_gauge= CC[:,:,2]
 
         if write:
-            self.write_geotif('TCresults/rmse_radar_atc_n_100.tif',RMSE_radar)
-            self.write_geotif('TCresults/rmse_sat_atc_n_100.tif',  RMSE_sat)
-            self.write_geotif('TCresults/rmse_gauge_atc_n_100.tif',RMSE_gauge)
+            self.write_geotif('TCresults/rmse_radar_mtc_n_100.tif',RMSE_radar)
+            self.write_geotif('TCresults/rmse_sat_mtc_n_100.tif',  RMSE_sat)
+            self.write_geotif('TCresults/rmse_gauge_mtc_n_100.tif',RMSE_gauge)
 
-            self.write_geotif('TCresults/cc_radar_atc_n_100.tif',CC_radar)
-            self.write_geotif('TCresults/cc_sat_atc_n_100.tif',  CC_sat)
-            self.write_geotif('TCresults/cc_gauge_atc_n_100.tif',CC_gauge)
+            self.write_geotif('TCresults/cc_radar_mtc_n_100.tif',CC_radar)
+            self.write_geotif('TCresults/cc_sat_mtc_n_100.tif',  CC_sat)
+            self.write_geotif('TCresults/cc_gauge_mtc_n_100.tif',CC_gauge)
 
             # self.write_geotif('test.tif', np.zeros((208,293)))
 
@@ -116,12 +117,15 @@ class TripleCollocation(object):
         RMSE= np.zeros(3, dtype=np.float16)
         CC= np.zeros(3, dtype=np.float16)
         ts= PixelTS().singlePixel(i,j)
+        ts.radar= ts.radar.shift()
+        ts.satellite= ts.satellite.shift()
         ts= self.preprocess(ts)
         # print('length of ts: ', len(ts))
         if len(ts)==0 or len(ts)<3:
             RMSE[:]= np.array([-9999]*3)
             CC[:]= np.array([-9999]*3)
         else:
+            # print(ts.columns)
             _sig, _r= self.mtc(ts)
             RMSE[:]= _sig
             CC[:]= _r
@@ -157,25 +161,27 @@ class TripleCollocation(object):
         data= data.astype('float32')
         cols= data.columns
         for col in cols:
+            # data= data.apply(np.log)
             data=data[data[col]>=threshold2]
             data.clip(lower=threshold2, inplace=True)
             # data.dropna(inplace=True)
         # print(data)
-        # data= data.apply(np.log)
-
+        data= data.apply(np.log)
         return data
 
 
     def mtc(self, X):
         #check X has shape (time sequence, 3)
-        N_boot= 100
+        N_boot= 500
         rmse= np.zeros((N_boot,3))
         cc= np.zeros((N_boot, 3))
         for i in range(N_boot):
             sigma= np.zeros(3)
             r= np.zeros(3)
             sample= self.bootstrap_resample(X, n=N_boot)
-            cov= X.cov().to_numpy()
+            # print(X.columns)
+
+            cov= sample.cov().to_numpy()
             # print(cov)
             # compute RMSE
             if (cov==0).any().any():
@@ -185,10 +191,10 @@ class TripleCollocation(object):
                 sigma[0]= cov[0,0] - (cov[0,1]*cov[0,2])/(cov[1,2])
                 sigma[1]= cov[1,1] - (cov[0,1]*cov[1,2])/(cov[0,2])
                 sigma[2]= cov[2,2] - (cov[0,2]*cov[1,2])/(cov[0,1])
+                # print(cov[0,0], cov[1,1], cov[2,2])
 
-                sigma[sigma<0]= 0.0001
+                sigma[sigma<0]= np.nan
                 sigma= sigma**.5
-                sigma[sigma<10^-3] = 0
 
                 #compute correlation coefficient
                 r[0] = (cov[0,1]*cov[0,2])/(cov[0,0]*cov[1,2])
@@ -199,12 +205,12 @@ class TripleCollocation(object):
                 r[r<0] = 0.0001
                 r[r>1] = 1
                 r= r**.5
-                r[r<10^-3] = 0
+                r[r<1e-3] = 0
 
                 rmse[i,:]= sigma
                 cc[i, :]= r
 
-        return rmse.mean(axis=0), cc.mean(axis=0)
+        return np.nanmean(rmse, axis=0), np.nanmean(cc,axis=0)
 
 
 

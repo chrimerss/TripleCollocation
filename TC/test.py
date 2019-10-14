@@ -95,6 +95,6 @@ if __name__=='__main__':
     # test_pixelts().   # passed with 0.37s
     # test_preprocess() #passed
     # test_parallel()     #passed 17.97 for 100 pixels
-    # test_parallel_write() #passed 2.85 hours for whole map
-    test_ts_tc()
+    test_parallel_write() #passed 2.85 hours for whole map
+    # test_ts_tc()
 
