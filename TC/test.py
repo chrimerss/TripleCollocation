@@ -1,7 +1,37 @@
+import sys
+sys.path.append('/Users/allen/Documents/Python/geoPackage')
 from dataprocess import GeoData, ProductData,PixelTS
 from tc import TripleCollocation
 import os
 import time
+import random
+from osgeo import gdal
+import matplotlib.pyplot as plt
+from geoPackage.visualize import layout
+from geoPackage.io import ReadFile
+
+
+def test_consistency():
+    # radar_file= random.choice(os.listdir('../cleaned/radars'))
+    # sat_file= random.choice(os.listdir('../cleaned/satellites'))
+    # gauge_file= random.choice(os.listdir('../cleaned/gauges'))
+    sat_file= 'nimerg20190919S140000.tif'
+    radar_file= 'PrecipRate_00.00_20190919-140000.grib2-var0-z0.tif'
+    gauge_file= 'ST2gg2019091914.Grb.tif'
+    radar= ReadFile(os.path.join('..','cleaned','radars',radar_file)).raster
+    sat= ReadFile(os.path.join('..','cleaned','satellites',sat_file)).raster
+    gauge= ReadFile(os.path.join('..','cleaned','gauges',gauge_file)).raster
+    fig, ax= plt.subplots(1,3,figsize=(12,4))
+    map= layout(gauge, extent='local')
+    ax[0].set_title(gauge_file)
+    
+    map= layout(radar, extent='local')
+    ax[1].set_title(radar_file)
+
+    map= layout(sat, extent='local')
+    ax[2].set_title(sat_file)
+
+    plt.show()
 
 def test_radar_name():
     radar_files= os.listdir(os.path.join('..','cleaned','mrmsrt1H4kmw'))
@@ -97,4 +127,5 @@ if __name__=='__main__':
     # test_parallel()     #passed 17.97 for 100 pixels
     test_parallel_write() #passed 2.85 hours for whole map
     # test_ts_tc()
+    # test_consistency()
 

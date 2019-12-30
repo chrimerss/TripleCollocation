@@ -1,0 +1,1 @@
+/Users/allen/Documents/TC/rainfall_analysis/GPM_data_warped/20170622203000.tif,/Users/allen/Documents/TC/rainfall_analysis/GPM_data_warped/20150616S000000.tif,/Users/allen/Documents/TC/rainfall_analysis/GPM_data_warped/20170622230000.tif,

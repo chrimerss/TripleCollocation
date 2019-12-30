@@ -56,7 +56,7 @@ def single(arg):
     norm_rmse= normRMSE(ts[x].values.astype(float), ts[y].values.astype(float))
     norm_mae= normMAE(ts[x].values.astype(float), ts[y].values.astype(float))
     bias= totalVolumeRatio(ts[x].values.astype(float), ts[y].values.astype(float))
-    pod= POD(ts[x].values.astype(float), ts[y].values.astype(float))
+    pod= POD(ts[x].values.astype(float), ts[y].values.astype(float),)
     far=FAR(ts[x].values.astype(float), ts[y].values.astype(float))
     csi= CSI(ts[x].values.astype(float), ts[y].values.astype(float))
     _sum_x= Sum(ts[x].values.astype(float))
@@ -169,8 +169,8 @@ def totalVolumeRatio(x, y):
 
 def POD(x, y, threshold=0.2):
     x,y= nonnan(x, y)
-    a= (x>threshold) & (y>threshold)
-    b= (x<threshold) & (y>threshold)
+    a= (x>=threshold) & (y>=threshold)
+    b= (x<threshold) & (y>=threshold)
     if len(a)==0 or (a.sum()+b.sum())==0:
         return np.nan
     else:
@@ -178,8 +178,8 @@ def POD(x, y, threshold=0.2):
 
 def FAR(x,y,threshold=0.2):
     x,y= nonnan(x, y)
-    c= (x>threshold) & (y<threshold)
-    a= (x>threshold) & (y>threshold)
+    c= (x>=threshold) & (y<threshold)
+    a= (x>=threshold) & (y>=threshold)
     if len(a)==0 or (a.sum()+c.sum())==0:
         return np.nan
     else:
@@ -187,9 +187,9 @@ def FAR(x,y,threshold=0.2):
 
 def CSI(x,y,threshold=0.2):
     x,y= nonnan(x, y)
-    a= (x>threshold) & (y>threshold)
-    b= (x<threshold) & (y>threshold)
-    c= (x>threshold) & (y<threshold)
+    a= (x>=threshold) & (y>=threshold)
+    b= (x<threshold) & (y>=threshold)
+    c= (x>=threshold) & (y<threshold)
     if len(a)==0 or (a.sum()+b.sum()+c.sum())==0:
         return np.nan
     else:
@@ -204,7 +204,7 @@ def Sum(x):
         return x.sum()
 
 def write_geotiff(dst, new_dict):
-        pth= '../cleaned/gauge4km/ST2gg2017082500.Grb.tif'
+        pth= '../cleaned/Harvey_gauge/ST2gg2017082500.Grb.tif'
         sample= gdal.Open(pth)
         projection= sample.GetProjection()
         trans= sample.GetGeoTransform()
@@ -220,5 +220,11 @@ def write_geotiff(dst, new_dict):
             outdata.FlushCache()
             outdata = None
 
+def rainAmount():
+    radar_pth= '../cleaned/Harvey_mrms'
+    gauge_pth= '../cleaned/Harvey_gauge'
+    sat_pth= '../cleaned/Harvey_GPM'
+    seqs= len(os.listdir(gauge_pth))
+
 if __name__=='__main__':
-    parallel('radar', 'satellite')     #2.48 hours to run
+    parallel('satellite', 'radar')     #2.48 hours to run

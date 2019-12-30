@@ -68,11 +68,14 @@ class ProductData(object):
         self.folder= folder
         if self.folder is None:
             if self.product== 'radar':
-                folder= '../cleaned/mrmsrt1H4kmw'
+                # folder= '../cleaned/radars'
+                folder= '../cleaned/Harvey_mrms'
             elif self.product== 'satellite':
-                folder= '../cleaned/GPMrt1H4kmw'
+                # folder= '../cleaned/satellites'
+                folder= '../cleaned/Harvey_GPM'
             elif self.product== 'gauge':
-                folder= '../cleaned/gauge4km'
+                # folder= '../cleaned/gauges'
+                folder= '../cleaned/Harvey_gauge'
         else:
             radar= self.folder[0]
             satellite= self.folder[1]
@@ -82,6 +85,7 @@ class ProductData(object):
 
     def loadTS(self, folder, product):
         files= sorted(os.listdir(folder))
+        # print(files)
         duration= len(files)
         ts_dict= {}
         for i, file in enumerate(files):
@@ -148,7 +152,7 @@ class GeoData(object):
 
     def _satName(self):
         # this function returns date and time from satellite file name
-        date_parttern= r'(2017[0-1][0-9][0-3][0-9])'
+        date_parttern= r'(201[5-9][0-1][0-9][0-3][0-9])'
         time_parttern= r'(S[0-2][0-9]0000)'
         date= re.search(date_parttern, self.file_name).group()
         time= re.search(time_parttern, self.file_name).group()[1:]
@@ -157,7 +161,7 @@ class GeoData(object):
 
     def _radName(self):
         # this function returns date and time from satellite file name
-        date_parttern= r'(2017[0-1][0-9][0-3][0-9])'
+        date_parttern= r'(201[5-9][0-1][0-9][0-3][0-9])'
         time_parttern= r'(-[0-2][0-9]0000)'
         date= re.search(date_parttern, self.file_name).group()
         time= re.search(time_parttern, self.file_name).group()[1:]
@@ -166,7 +170,7 @@ class GeoData(object):
 
     def _gauName(self):
         # this function returns date and time from satellite file name
-        date_parttern= r'(2017[0-1][0-9][0-3][0-9][0-2][0-9])'
+        date_parttern= r'(201[5-9][0-1][0-9][0-3][0-9][0-2][0-9])'
         date= re.search(date_parttern, self.file_name).group()[:8]
         time= re.search(date_parttern, self.file_name).group()[8:]
         # print(date, time)

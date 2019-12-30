@@ -99,13 +99,13 @@ class TripleCollocation(object):
         CC_gauge= CC[:,:,2]
 
         if write:
-            self.write_geotif('TCresults/rmse_radar_mtc_n_100.tif',RMSE_radar)
-            self.write_geotif('TCresults/rmse_sat_mtc_n_100.tif',  RMSE_sat)
-            self.write_geotif('TCresults/rmse_gauge_mtc_n_100.tif',RMSE_gauge)
+            self.write_geotif('TCresults/rmse_radar.tif',RMSE_radar)
+            self.write_geotif('TCresults/rmse_sat.tif',  RMSE_sat)
+            self.write_geotif('TCresults/rmse_gauge.tif',RMSE_gauge)
 
-            self.write_geotif('TCresults/cc_radar_mtc_n_100.tif',CC_radar)
-            self.write_geotif('TCresults/cc_sat_mtc_n_100.tif',  CC_sat)
-            self.write_geotif('TCresults/cc_gauge_mtc_n_100.tif',CC_gauge)
+            self.write_geotif('TCresults/cc_radar.tif',CC_radar)
+            self.write_geotif('TCresults/cc_sat.tif',  CC_sat)
+            self.write_geotif('TCresults/cc_gauge.tif',CC_gauge)
 
             # self.write_geotif('test.tif', np.zeros((208,293)))
 

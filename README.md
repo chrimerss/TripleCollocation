@@ -9,7 +9,9 @@ The big assumption of utilizing TC method is: 1) three data source must be indep
 
 The MTC method can be formularized as follow,
 
+
 $$R_i=A_iT^{\beta_i}E_i$$
+
 
 The following steps are rearanging these terms by calculating its corvariance, and coorelation coefficient.
 
