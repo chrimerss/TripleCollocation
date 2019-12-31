@@ -4,5 +4,8 @@ cleaned/*
 *.tif
 *.ipynb
 *.pdf
+documents/*
 *.ppt
 *.pptx
+*.docx
+*.doc
